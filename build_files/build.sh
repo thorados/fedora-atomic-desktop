@@ -8,9 +8,35 @@ set -ouex pipefail
 # RPMfusion repos are available by default in ublue main images
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+# RPM Fusion
+dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+# Enable Flahub
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# Media Codecs
+dnf5 group install -y multimedia
+dnf5 swap -y 'ffmpeg-free' 'ffmpeg' --allowerasing # Switch to full FFMPEG.
+dnf5 upgrade -y @multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin # Installs gstreamer components. Required if you use Gnome Videos and other dependent applications.
+dnf5 group install -y sound-and-video # Installs useful Sound and Video complementary packages.
+
+# H/W Video Acceleration
+dnf5 install ffmpeg-libs libva libva-utils
+dnf5 install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264
+dnf5 config-manager setopt fedora-cisco-openh264.enabled=1
 
 # this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf5 install -y             \
+    tmux                    \
+    util-linux              \
+    chezmoi                 \
+    neovim                  \
+    btop                    \
+    zsh                     \
+    virt-viewer             \
+    zsh-autosuggestions     \
+    zsh-syntax-highlighting
 
 # Use a COPR Example:
 #
@@ -18,6 +44,38 @@ dnf5 install -y tmux
 # dnf5 -y install package
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
+
+# install hyprland
+dnf5 copr enable -y solopasha/hyprland
+dnf5 install -y         \
+    hyprland            \
+    hyprpaper           \
+    hyprpicker          \
+    hypridle            \
+    hyprlock            \
+    hyprsunset          \
+    hyprpolkitagent     \
+    hyprsysteminfo      \
+    qt6ct-kde           \
+    hyprland-qt-support \
+    hyprland-qtutils
+dnf5 copr disable -y solopasha/hyprland
+
+# install windows manager utils
+dnf5 install -y             \
+    waybar                  \
+    kitty                   \
+    pipewire                \
+    pavucontrol             \
+    nm-connection-editor    \
+    rofi                    \
+    brightnessctl           \
+    blueman                 \
+    network-manager-applet  \
+    wl-gammactl             \
+    breeze-cursor-theme     \
+    gtk-murrine-engine      \
+    gnome-themes-extra
 
 #### Example for enabling a System Unit File
 
