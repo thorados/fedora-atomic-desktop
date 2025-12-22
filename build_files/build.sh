@@ -21,7 +21,7 @@ dnf5 upgrade -y @multimedia --setopt="install_weak_deps=False" --exclude=Package
 dnf5 group install -y sound-and-video # Installs useful Sound and Video complementary packages.
 
 # H/W Video Acceleration
-dnf5 install ffmpeg-libs libva libva-utils
+dnf5 install -y ffmpeg-libs libva libva-utils
 dnf5 install -y openh264 gstreamer1-plugin-openh264 mozilla-openh264
 dnf5 config-manager setopt fedora-cisco-openh264.enabled=1
 
