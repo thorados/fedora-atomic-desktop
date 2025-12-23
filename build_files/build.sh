@@ -76,6 +76,9 @@ dnf5 install -y             \
     gtk-murrine-engine      \
     gnome-themes-extra
 
+# Autostart cleanup
+rm -f /etc/xdg/autostart/blueman.desktop /etc/xdg/autostart/nm-applet.desktop
+
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
