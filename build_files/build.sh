@@ -46,7 +46,7 @@ dnf5 install -y             \
 
 # install hyprland
 dnf5 copr enable -y solopasha/hyprland
-dnf5 install -y  --skip-broken       \ # meh
+dnf5 install -y  --skip-broken \
     hyprland            \
     hyprpaper           \
     hyprpicker          \
